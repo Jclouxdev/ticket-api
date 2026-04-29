@@ -1,70 +1,17 @@
-import {
-  IsDate,
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  Max,
-  MaxLength,
-  Min,
-  MinLength,
-} from 'class-validator';
+import { z } from 'zod';
 import { EventStatus } from 'utils/constants/enums';
 
-export class CreateEventDto {
-  @IsString()
-  @MinLength(3)
-  @MaxLength(100)
-  @IsNotEmpty()
-  name!: string;
+export const CreateEventSchema = z.object({
+  name: z.string().min(3).max(100),
+  description: z.string().min(10).max(1000),
+  ticketPrice: z.number().min(0).max(1000),
+  availableEnrolledQuantity: z.number().min(0).max(500000),
+  saleStartAt: z.coerce.date().transform((val) => val.getTime()),
+  saleEndAt: z.coerce.date().transform((val) => val.getTime()),
+  eventStartingDate: z.coerce.date().transform((val) => val.getTime()),
+  eventEndingDate: z.coerce.date().transform((val) => val.getTime()),
+  eventStatus: z.enum(EventStatus),
+  eventType: z.string().min(3).max(50),
+});
 
-  @IsString()
-  @MinLength(10)
-  @MaxLength(1000)
-  @IsNotEmpty()
-  description!: string;
-
-  @IsNumber()
-  @Min(0)
-  @Max(1000)
-  @IsNotEmpty()
-  ticketPrice!: number;
-
-  @IsNumber()
-  @Min(0)
-  @Max(500000)
-  @IsNotEmpty()
-  availableEnrolledQuantity!: number;
-
-  @IsDate()
-  @IsNotEmpty()
-  saleStartAt!: Date;
-
-  @IsDate()
-  @IsNotEmpty()
-  saleEndAt!: Date;
-
-  @IsDate()
-  @IsNotEmpty()
-  eventStartingDate!: Date;
-
-  @IsDate()
-  @IsNotEmpty()
-  eventEndingDate!: Date;
-
-  @IsString()
-  @MinLength(3)
-  @MaxLength(255)
-  @IsNotEmpty()
-  location!: string;
-
-  @IsNotEmpty()
-  @IsEnum(EventStatus)
-  eventStatus!: EventStatus;
-
-  @IsString()
-  @MinLength(3)
-  @MaxLength(50)
-  @IsNotEmpty()
-  eventType!: string;
-}
+export type CreateEventDto = z.infer<typeof CreateEventSchema>;

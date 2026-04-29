@@ -1,6 +1,15 @@
 -- This file contains the starting schema for the database. Database is a PostgreSQL database.
 CREATE TABLE event_type (id SERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL);
 
+CREATE TYPE event_status AS ENUM (
+  'not confirmed',
+  'ticket office open',
+  'full',
+  'canceled',
+  'closed',
+  'ongoing'
+);
+
 CREATE TABLE event (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -13,14 +22,7 @@ CREATE TABLE event (
   event_starting_date TIMESTAMP NOT NULL,
   event_ending_date TIMESTAMP NOT NULL,
   location VARCHAR(255) NOT NULL,
-  event_status ENUM (
-    'not confirmed',
-    'ticket office open',
-    'full',
-    'canceled',
-    'closed',
-    'ongoing'
-  ) NOT NULL,
+  event_status event_status NOT NULL,
   event_type_id INTEGER NOT NULL,
   FOREIGN KEY (event_type_id) REFERENCES event_type (id)
 );

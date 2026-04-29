@@ -32,7 +32,6 @@ export default tseslint.config(
     },
   },
   {
-    files: ['src/database/**'],
     rules: {
       '@typescript-eslint/no-unsafe-assignment': 'warn',
       '@typescript-eslint/no-unsafe-call': 'warn',
